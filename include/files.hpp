@@ -9,6 +9,7 @@
 #include <iostream>
 #include <print>
 #include <ranges>
+#include <regex>
 #include <sstream>
 #include <string_view>
 #include <vector>
@@ -54,8 +55,25 @@ get_input_file( const std::uint32_t day_no ) {
 }
 
 constexpr std::vector<std::string_view>
-file_lines( const std::string_view file ) {
-    return file | std::views::split( '\n' )
+split_input( const std::string_view file,
+             const std::string_view delim = "\n" ) {
+    return file | std::views::split( delim )
+           | std::views::transform( []( auto && rng ) {
+                 return std::string_view( &*rng.cbegin(),
+                                          std::ranges::distance( rng ) );
+             } )
+           | std::ranges::to<std::vector<std::string_view>>();
+}
+
+constexpr std::vector<std::string_view>
+sanitize_input( const std::vector<std::string_view> & inputs,
+                const std::regex &                    pattern ) {
+    const auto filter_func = [&pattern]( const auto view ) {
+        std::smatch       result;
+        const std::string tmp{ view.data(), view.size() };
+        return std::regex_match( tmp.cbegin(), tmp.cend(), result, pattern );
+    };
+    return inputs | std::views::filter( filter_func )
            | std::views::transform( []( auto && rng ) {
                  return std::string_view( &*rng.cbegin(),
                                           std::ranges::distance( rng ) );
