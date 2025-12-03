@@ -15,4 +15,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Werror -DNDEBUG -march=native -Wall -Wextra -pedan
 # Default compile features
 set(DEFAULT_COMPILE_FEATURES cxx_std_23)
 
-add_subdirectory(day1)
+# Capture all "day" folders
+file(GLOB DAY_DIRS RELATIVE ${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/day*")
+foreach(dir ${DAY_DIRS})
+    if (IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${dir})
+        add_subdirectory(${dir})
+    endif()
+endforeach()
