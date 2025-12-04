@@ -9,8 +9,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include)
 
 set(JANKY_VIM_LINTING_FLAGS "-Wno-pragma-once-outside-header")
-set(CMAKE_CXX_FLAGS_DEBUG "${JANKY_VIM_LINTING_FLAGS} -Wall -Wextra -Wconversion -pedantic -O0 -ggdb -fpic -fconcepts-diagnostics-depth=2")
-set(CMAKE_CXX_FLAGS_RELEASE "-Werror -DNDEBUG -march=native -Wall -Wextra -pedantic -Wconversion -O3 -fpic")
+
+set(GENERAL_FLAGS "-Wall -Wextra -pedantic -Wconversion -fpic -Wno-comma-subscript")
+set(CMAKE_CXX_FLAGS_DEBUG "${JANKY_VIM_LINTING_FLAGS} ${GENERAL_FLAGS} -O0 -ggdb -fpic -fconcepts-diagnostics-depth=2")
+set(CMAKE_CXX_FLAGS_RELEASE "-Werror -DNDEBUG -march=native ${GENERAL_FLAGS} -O3 -fpic")
 
 # Default compile features
 set(DEFAULT_COMPILE_FEATURES cxx_std_23)
